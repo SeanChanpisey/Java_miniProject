@@ -13,7 +13,7 @@ public class FileHandler {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter("test.bin"));
             String stuData = stu.toString();
-            for (int i = 1; i <= 1000000; i++) {
+            for (int i = 1; i <= 100000; i++) {
                 bw.write(stuData + " " + i + "\n");
 
             }
