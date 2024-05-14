@@ -1,20 +1,33 @@
 package view;
 
 import controller.StudentController;
+import model.Student;
+import org.nocrala.tools.texttablefmt.BorderStyle;
+import org.nocrala.tools.texttablefmt.Table;
 import util.StudentControllerImp;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class View {
     private StudentController studentController;
     private Scanner scanner;
+    private List<Student> data;
+
 
     public View() {
         studentController = new StudentControllerImp();
         scanner = new Scanner(System.in);
+        data = new ArrayList<>();
+    }
+    public void loadData() {
+        data = studentController.readObjectsFromFile();
+        System.out.println("Data loaded successfully.");
     }
 
     public void displayMenu() {
+        System.out.println("List of students:");
         int choice;
         do {
             System.out.println("Menu:");
@@ -29,7 +42,7 @@ public class View {
             System.out.println("0. EXIT");
 
             System.out.print("Enter your choice: ");
-            choice = scanner.nextInt();
+            choice = new Scanner(System.in).nextInt();
 
             switch (choice) {
                 case 1:
@@ -37,6 +50,17 @@ public class View {
                     // Implement this based on your logic
                     break;
                 case 2:
+                    System.out.println("List of students:");
+
+                    // Assuming data.size() > 0 to ensure there are students to display
+                    if (data.size() > 0) {
+                        int pageSize = 4; // Number of rows per page
+
+                        // Display pagination
+                        studentController.pagination(data, pageSize);
+                    } else {
+                        System.out.println("No students to display.");
+                    }
                     break;
                 case 3:
                     // Commit data to file
@@ -55,12 +79,17 @@ public class View {
                     // Implement this based on your logic
                     break;
                 case 7:
-                    // Generate data to file
-                    // Implement this based on your logic
+                    try{
+                        System.out.print("[+] Number of objects you want to generate (100M - 1_000_000_000): ");
+                        int count = scanner.nextInt();
+                        studentController.writeToFile(count);
+
+                    }catch (Exception e){
+                        System.out.println("[!] Number Invalid");
+                    }
                     break;
                 case 8:
-                    // Delete/clear all data from data store
-                    // Implement this based on your logic
+                    studentController.clearFile();
                     break;
                 case 0:
                     System.out.println("Exiting...");
@@ -69,8 +98,5 @@ public class View {
                     System.out.println("Invalid choice. Please enter a valid option.");
             }
         } while (choice != 0);
-    }
-    public void closeScanner() {
-        scanner.close();
     }
 }
