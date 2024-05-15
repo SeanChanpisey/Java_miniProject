@@ -79,6 +79,7 @@ public class Main {
                         studentController.clearDataFile();
                         break;
                     case 0:
+                        studentController.commitData();
                         System.out.println("Exiting...");
                         break;
                     default:
